@@ -1,65 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Types dance </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Types dance </title>
 </head>
+
 <body>
-    <div class ="container">
-       <div id="button-view"></div>
+  <div class="container">
+    <div id="button-view"></div>
 
-       <form id="dance-form">
-         <lable for="dance-input">add a dance</lable>  
-         <input type="text"> in ="dance-input">
-         <input type="submit" value="Submit">
-         <br>
-       </form>
+    <form id="dance-input">
+      <lable for="dance-input">add a dance</lable>
+      <input type="text" id="dance-input">
+      <input id="add-daance" type="submit" id="value=" value="Submit">
+      <br>
 
-       <div id="movies-view"></div>
+    </form>
+
+    <div id="dances-view"></div>
 
     <script src="http://code.jquery.com/jquery-3.3.1.js"></script>
-    <script type="text/javascript">  
+    <script type="text/javascript">
 
-    var dances = ["waltz", "foxtrot", "quickstep", "tango", "Viennese waltz", "rumba", "samba", "paso doble", "cha-cha-cha", "jive",];
+      var dances = ["waltz", "foxtrot", "quickstep", "tango", "Viennese waltz", "rumba", "samba", "paso doble", "cha-cha-cha", "jive",];
 
-    function showDanceInfor() {
-       
-        var dance =  $(this).attr("data-name");
-        var quertURL = "http://api.giphy.com/v1/gifs/search?q="+dance+"&api_key=kVkJhOylzcR2l5ADJzkrsE5zGAvxAjGr"
+      function showDanceInfor() {
+
+        var dance = $(this).attr("data-name");
+        var quertURL = "http://api.giphy.com/v1/gifs/search?q=" + dance + "&api_key=kVkJhOylzcR2l5ADJzkrsE5zGAvxAjGr"
         $.ajax({
-        url: queryURL,
-        method: "GET"
-      }).then(function(response) {
-        console.log(response);
+          url: queryURL,
+          method: "GET"
+        }).then(function (response) {
+          console.log(response);
 
-        var danceDiv = $("<div class='dances'>");
-        var rating = response.Rated;
-        var p = $("<p>").text("Rating: " + rating);
-        movieDiv.prepend(p);
-        var image = $("<img>").attr("src". ImgURL);
-        movieDiv.append(image);
+          var danceDiv = $("<div class='dances'>");
+          var rating = response.Rated;
+          var p = $("<p>").text("Rating: " + rating);
+          movieDiv.prepend(p);
+          var image = $("<img>").attr("src".ImgURL);
+          movieDiv.append(image);
+            $("#dances-view").prepend(danceDiv);
+        });
+      }
+      function renderButtons() {
+        $("#buttons-view").empty();
+        for (var i = 0; i < dances.length; i++) {
+          var a = $("<button>");
+          a.addClass("dance-btn");
+          a.attr("data-name", dances[i]);
+          a.text(dances[i]);
+          $("#buttons-view").append(a);
+        }
+      }
 
-
+      $("#add-dance").on("click", function(event){ 
+        event.preventDefault();
+      var movie = $("#dance-input").val.trim();
+      dances.push(movie);
+       renderButtons(); 
       });
-    }
-    function renderButtons() {
-       $("#buttons-view").empty();
-       $("#buttons-view").empty();
-       for (var i = 0; i < dance.length; i++) {
 
-    }
-    }
-       
+      $(document).on("click", ".dance-btn", showDanceInfor);
 
+      renderButtons();
 
-    
+      $(".gif").on("click", function() {
+        var state = $(this).attr("data-state");
+        // console.log(state); 
 
+        if (state === "still") {
+          var animatedUrl = $(this).attr("data-animate");
+         // update the still scr attr to animated scr value
+          $(this).attr("src", animatedUrl,);
+          // This argument changes the state to animate
+          $(this).attr("data-state", "animate");
 
-    
-  </script>
-</div>
+        } else if (state === "animate") {
+          var stillUrl = $(this).attr("data-still");
+           // update the animated scr attr to still scr value
+          $(this).attr("src", stillUrl,);
+          // this argument changes the state to still
+          $(this).attr("data-state", "still");
+        } else {
+          alert("this should never happen");
+        }
+
+          
+        
+      })
+
+    </script>
+  </div>
 
 </body>
 
