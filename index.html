@@ -10,12 +10,12 @@
 
 <body>
   <div class="container">
-    <div id="button-view"></div>
+    <div id="buttons-view"></div>
 
-    <form id="dance-input">
+    <form id="dance-form">
       <lable for="dance-input">add a dance</lable>
       <input type="text" id="dance-input">
-      <input id="add-daance" type="submit" id="value=" value="Submit">
+      <input id="add-dance" type="submit" value="Submit">
       <br>
 
     </form>
@@ -30,20 +30,26 @@
       function showDanceInfor() {
 
         var dance = $(this).attr("data-name");
-        var quertURL = "http://api.giphy.com/v1/gifs/search?q=" + dance + "&api_key=kVkJhOylzcR2l5ADJzkrsE5zGAvxAjGr"
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + dance + "&api_key=kVkJhOylzcR2l5ADJzkrsE5zGAvxAjGr&limit=10"
         $.ajax({
           url: queryURL,
           method: "GET"
         }).then(function (response) {
           console.log(response);
 
+          $("#dances-view").empty();
+        for (var i=0; i<10; i++) {
+          
+          var imgURL = response.data[i].images.fixed_height_still.url; 
           var danceDiv = $("<div class='dances'>");
-          var rating = response.Rated;
+          var rating = response.data[i].rating;
           var p = $("<p>").text("Rating: " + rating);
-          movieDiv.prepend(p);
-          var image = $("<img>").attr("src".ImgURL);
-          movieDiv.append(image);
-            $("#dances-view").prepend(danceDiv);
+          danceDiv.prepend(p);
+          var image = $("<img>").attr("src",imgURL);
+          danceDiv.append(image);
+          $("#dances-view").prepend(danceDiv);
+        }
+
         });
       }
       function renderButtons() {
@@ -57,42 +63,41 @@
         }
       }
 
-      $("#add-dance").on("click", function(event){ 
+      $("#add-dance").on("click", function (event) {
         event.preventDefault();
-      var movie = $("#dance-input").val.trim();
-      dances.push(movie);
-       renderButtons(); 
+        var dance = $("#dance-input").val().trim();
+        dances.push(dance);
+        renderButtons();
       });
 
       $(document).on("click", ".dance-btn", showDanceInfor);
 
-      renderButtons();
-
-      $(".gif").on("click", function() {
+      $(".gif").on("click", function () {
         var state = $(this).attr("data-state");
         // console.log(state); 
 
         if (state === "still") {
           var animatedUrl = $(this).attr("data-animate");
-         // update the still scr attr to animated scr value
-          $(this).attr("src", animatedUrl,);
+          // update the still scr attr to animated scr value
+          $(this).attr("src", animatedUrl);
           // This argument changes the state to animate
           $(this).attr("data-state", "animate");
 
         } else if (state === "animate") {
           var stillUrl = $(this).attr("data-still");
-           // update the animated scr attr to still scr value
-          $(this).attr("src", stillUrl,);
+          // update the animated scr attr to still scr value
+          $(this).attr("src", stillUrl);
           // this argument changes the state to still
           $(this).attr("data-state", "still");
         } else {
           alert("this should never happen");
         }
 
-          
-        
+
+
       })
 
+       renderButtons();
     </script>
   </div>
 
