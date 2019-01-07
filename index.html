@@ -40,12 +40,18 @@
           $("#dances-view").empty();
         for (var i=0; i<10; i++) {
           
-          var imgURL = response.data[i].images.fixed_height_still.url; 
+          var imgURL = response.data[i].images.fixed_height_still.url;
+          var gifURL = response.data[i].images.fixed_height.url;
           var danceDiv = $("<div class='dances'>");
           var rating = response.data[i].rating;
           var p = $("<p>").text("Rating: " + rating);
           danceDiv.prepend(p);
           var image = $("<img>").attr("src",imgURL);
+          image.attr("data-state", "still");
+          image.attr("data-animate", gifURL);
+          image.attr("data-still", imgURL);
+            image.addClass("gif");
+
           danceDiv.append(image);
           $("#dances-view").prepend(danceDiv);
         }
@@ -72,7 +78,7 @@
 
       $(document).on("click", ".dance-btn", showDanceInfor);
 
-      $(".gif").on("click", function () {
+      $(document).on("click", ".gif", function () {
         var state = $(this).attr("data-state");
         // console.log(state); 
 
